@@ -1,3 +1,6 @@
+# Pasta fonte de feedbacks (material bruto — não versionar)
+Feedbacks do Clientes*/
+
 # Pacotes de deploy (gerados — não versionar)
 _deploy/
 *.zip
