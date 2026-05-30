@@ -1,0 +1,11 @@
+# Pacotes de deploy (gerados — não versionar)
+_deploy/
+*.zip
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Estado do componente de design (não usado em produção)
+.image-slots.state.json
