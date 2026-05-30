@@ -62,7 +62,7 @@
 		function maxOffset() { return Math.max(0, track.scrollWidth - vp().clientWidth); }
 		function step() {
 			var vw = vp().clientWidth;
-			if (vw < 640) return Math.round(vw * 0.9);
+			if (vw <= 768) return Math.round(vw);
 			var declared = wrap.getAttribute('data-step');
 			if (declared === 'full') return Math.round(vw);
 			var n = parseInt(declared || '0', 10);
@@ -114,6 +114,24 @@
 			apply();
 			setTimeout(function () { wheelLock = false; }, 550);
 		}, { passive: false });
+
+		/* Gesto de arrastar (swipe) no mobile */
+		var touchStartX = 0;
+		wrap.addEventListener('touchstart', function(e) {
+			touchStartX = e.changedTouches[0].screenX;
+		}, { passive: true });
+		wrap.addEventListener('touchend', function(e) {
+			var touchEndX = e.changedTouches[0].screenX;
+			var dist = touchStartX - touchEndX;
+			var max = maxOffset();
+			if (dist > 40 && pos < max) { /* swipe para esquerda -> proximo */
+				pos += step();
+				apply();
+			} else if (dist < -40 && pos > 0) { /* swipe para direita -> anterior */
+				pos -= step();
+				apply();
+			}
+		}, { passive: true });
 
 		window.addEventListener('resize', function () { pos = 0; apply(); });
 
