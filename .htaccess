@@ -1,37 +1,21 @@
 # ===========================================================
-# Zoo Agency — configuração de servidor (Apache / Hostinger)
+# Zoo Agency — configuração de servidor (Apache / HostGator)
 # ===========================================================
-
-# ---- Forçar HTTPS ----
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteCond %{HTTPS} off
-	RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
 
 # ---- Cabeçalhos de segurança ----
 <IfModule mod_headers.c>
-	# impede que o site seja embutido em iframes de terceiros (clickjacking)
-	Header always set X-Frame-Options "SAMEORIGIN"
-	# impede o navegador de "adivinhar" tipos de arquivo (MIME sniffing)
-	Header always set X-Content-Type-Options "nosniff"
-	# controla quais informações de origem são enviadas ao navegar para fora
-	Header always set Referrer-Policy "strict-origin-when-cross-origin"
-	# bloqueia APIs sensíveis que o site não usa
-	Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
-	# Content-Security-Policy — só permite recursos do próprio site.
-	# Fontes são auto-hospedadas (pasta /fonts), então nenhum domínio externo é necessário.
-	Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+	Header set X-Frame-Options "SAMEORIGIN"
+	Header set X-Content-Type-Options "nosniff"
+	Header set Referrer-Policy "strict-origin-when-cross-origin"
+	Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+	Header set Content-Security-Policy "default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
 </IfModule>
 
-# ---- Bloquear acesso a arquivos internos ----
-# documentação e configs não devem ser acessíveis publicamente
-<FilesMatch "\.(md|htaccess)$">
-	Require all denied
+# ---- Bloquear acesso a arquivos internos (.md) ----
+<FilesMatch "\.md$">
+	Order allow,deny
+	Deny from all
 </FilesMatch>
-
-# bloquear a pasta de artes-fonte caso seja subida por engano
-RedirectMatch 404 ^/Artes\ para\ o\ site.*
 
 # ---- Cache de assets estáticos (performance) ----
 <IfModule mod_expires.c>
