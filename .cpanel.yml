@@ -1,0 +1,13 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home1/klinsm65/public_html
+    - /bin/cp -f index.html $DEPLOYPATH
+    - /bin/cp -f estilos.css $DEPLOYPATH
+    - /bin/cp -f app.js $DEPLOYPATH
+    - /bin/cp -f fonts.css $DEPLOYPATH
+    - /bin/cp -f favicon.ico $DEPLOYPATH
+    - /bin/cp -f .htaccess $DEPLOYPATH
+    - /bin/cp -Rf fonts $DEPLOYPATH
+    - /bin/cp -Rf imagens $DEPLOYPATH
+    - /bin/cp -Rf audios $DEPLOYPATH
