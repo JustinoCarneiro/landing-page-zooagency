@@ -1,0 +1,145 @@
+/* TEMA DIA DOS NAMORADOS */
+/* Para desativar, remova a classe 'tema-namorados' do <body> e as chamadas deste CSS/JS no index.html */
+
+body.tema-namorados {
+    --bg-0: #1a0508;
+    --bg-1: #2d0b13;
+    --bg-2: #3f111c;
+    --orange: #ff3366; /* Rosa choque / Vermelho claro */
+    --orange-deep: #cc0033; /* Vermelho escuro */
+    --orange-soft: #ff6699; /* Rosa suave */
+    --card: rgba(60, 15, 25, 0.55);
+    --card-border: rgba(255, 51, 102, 0.16);
+}
+
+/* Container dos corações caindo */
+#hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.floating-heart {
+    position: absolute;
+    top: -10vh;
+    color: #ff4d4d;
+    opacity: 0.7;
+    animation: fall linear forwards;
+    filter: drop-shadow(0 0 5px rgba(255, 77, 77, 0.5));
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Popup Dia dos Namorados */
+#namorados-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#namorados-popup-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.namorados-popup-card {
+    background: transparent;
+    border: none;
+    padding: 0;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    transform: translateY(20px) scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    border-radius: 12px;
+}
+
+#namorados-popup-overlay.show .namorados-popup-card {
+    transform: translateY(0) scale(1);
+}
+
+.namorados-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.namorados-popup-close:hover {
+    background: var(--orange-soft);
+}
+
+.namorados-popup-img {
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: 0;
+    display: block;
+}
+
+.namorados-popup-btn {
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    white-space: nowrap;
+    
+    /* Alto contraste (Branco sobre fundo vermelho) */
+    background: #ffffff !important;
+    color: var(--orange-deep) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+}
+
+.namorados-popup-btn svg {
+    color: var(--orange-deep) !important;
+}
+
+.namorados-popup-btn:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.7), 0 0 0 3px rgba(255,255,255,0.4) !important;
+    filter: none !important;
+    background: #ffffff !important;
+}
