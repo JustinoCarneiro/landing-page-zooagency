@@ -17,6 +17,6 @@ sed -i 's/ class="tema-namorados"//g' "$INDEX_FILE"
 sed -i '/<link rel="stylesheet" href="tema-namorados.css">/d' "$INDEX_FILE"
 
 # 3. Remove a importação do JavaScript do tema de namorados
-sed -i '/<script src="tema-namorados.js" defer><\/script>/d' "$INDEX_FILE"
+sed -i '/<script src="tema-namorados.js"><\/script>/d' "$INDEX_FILE"
 
 echo "Concluído! Tema revertido com sucesso. O site voltou à estética original."
