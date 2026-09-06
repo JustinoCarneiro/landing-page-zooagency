@@ -12,3 +12,7 @@ desktop.ini
 
 # Estado do componente de design (não usado em produção)
 .image-slots.state.json
+
+# ─── OndaDev ───
+.ondadev/handoff/current.md
+CLAUDE.local.md
