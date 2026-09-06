@@ -1,0 +1,6 @@
+title = "Zoo Agency (landing page) — gitleaks"
+
+# Site estático sem backend nem credenciais. Regras padrão do gitleaks bastam;
+# nenhum allowlist de fixture é necessário.
+[extend]
+useDefault = true
