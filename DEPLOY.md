@@ -15,6 +15,13 @@ O site é a pasta **`public/`**. Nada fora dela é publicado (documentação, `.
   (projeto Pages `zooagency`, criado por upload direto). Segredos no repositório: `CLOUDFLARE_API_TOKEN`
   (permissão só *Account > Cloudflare Pages > Edit*) e `CLOUDFLARE_ACCOUNT_ID`. O workflow passa `--branch=main`
   para o deploy sair como **produção**; no primeiro deploy, conferir no painel que ele está marcado "Production".
+- **Confirmado em 07/11/2026:** o deploy do Actions sai como **Production** (os dois vídeos sem uso sumiram do ar
+  em `zooagency.com.br`). Domínio e `www` ativos, com `www` redirecionando 301 para o apex.
+- **Limitação do Pages:** ele **não responde pedidos de trecho (Range/206)** para arquivos estáticos. Testado em um
+  iPhone (Safari): os vídeos e o áudio tocaram. Se um dia entrarem vídeos grandes, revalidar no Safari/iOS (saídas:
+  Pages Function que devolva 206, ou mídia em um bucket R2 com domínio próprio).
+- **HostGator:** a renovação foi desligada pelo cliente em 07/11/2026; o plano segue até o fim do ciclo
+  (contratado em 28/05/2026) e depois some. Só então limpar da zona DNS os registros que apontam para ela.
 - **`public/_headers`** substitui o `.htaccess`: aplica os cabeçalhos de segurança (incluindo a CSP) e define o cache. Imagens e áudios têm cache curto (7 dias) porque são trocados mantendo o mesmo nome.
 - **`public/404.html`** é obrigatório: sem ele a Cloudflare serve a página inicial em qualquer endereço inexistente.
 - **Domínio:** o apex (`zooagency.com.br`) exige a zona DNS na Cloudflare (trocar os nameservers no Registro.br). Os registros atuais são só `A` para o apex e `www` como CNAME; não há e-mail nem subdomínios.
