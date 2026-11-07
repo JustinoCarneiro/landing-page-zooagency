@@ -29,17 +29,26 @@ Site **estático** (HTML + CSS + JavaScript puro), sem frameworks nem dependênc
 
 ## 📁 Estrutura
 
+Tudo o que vai para o ar fica em **`public/`**. O que está fora dela (documentação, `.htaccess`, scripts) nunca é publicado.
+
 ```
 .
-├── index.html          # página única
-├── estilos.css         # estilos + design tokens + responsividade
-├── app.js              # carrosséis, menu mobile, player de áudio, scroll reveal
-├── fonts.css           # @font-face das fontes locais
-├── favicon.ico
-├── .htaccess           # HTTPS, cabeçalhos de segurança, cache (Apache/HostGator)
-├── fonts/              # fontes .woff2 auto-hospedadas
-├── imagens/            # logo, donos, painéis, serviços, streampacks, og-cover…
-└── audios/clientes/    # feedbacks dos canais (atualmente áudios de teste)
+├── public/                 # o site: é esta pasta que vai para a hospedagem
+│   ├── index.html          # página única
+│   ├── estilos.css         # estilos + design tokens + responsividade
+│   ├── app.js              # carrosséis, menu mobile, player de áudio, scroll reveal
+│   ├── fonts.css           # @font-face das fontes locais
+│   ├── fonts/              # fontes .woff2 auto-hospedadas
+│   ├── imagens/            # logo, donos, painéis, serviços, streampacks, og-cover…
+│   ├── audios/clientes/    # feedbacks dos canais (atualmente áudios de teste)
+│   ├── favicon.ico
+│   ├── _headers            # cabeçalhos de segurança e cache (Cloudflare Pages)
+│   ├── 404.html            # página de erro
+│   ├── robots.txt
+│   └── sitemap.xml
+├── .htaccess               # só para Apache/HostGator (a Cloudflare ignora); fica como plano B
+├── DEPLOY.md, ARQUITETURA.md, README.md
+└── scripts/, .ondadev/, …  # ferramentas e metodologia (não são publicadas)
 ```
 
 Documentação complementar:
@@ -54,7 +63,7 @@ Documentação complementar:
 Não precisa de build. Basta servir os arquivos por HTTP:
 
 ```bash
-python3 -m http.server 3000
+cd public && python3 -m http.server 3000
 ```
 
 Depois abra **http://localhost:3000**.
@@ -65,19 +74,15 @@ Depois abra **http://localhost:3000**.
 
 ## 🚀 Publicação
 
-O site roda em qualquer hospedagem estática. Em servidores **Apache** (ex.: HostGator), o `.htaccess` já aplica HTTPS forçado, cabeçalhos de segurança, cache e compressão.
+O site é estático e roda em qualquer hospedagem. O destino previsto é o **Cloudflare Pages** (gratuito), na conta do cliente, publicando a pasta **`public/`** (sem build). Os cabeçalhos de segurança e o cache vêm do arquivo `public/_headers`; o `.htaccess` só vale em Apache.
 
-Consulte o **`DEPLOY.md`** para o passo a passo e a lista do que enviar / não enviar.
-
-> ⚠️ O `.htaccess` é específico de Apache. Em GitHub Pages ou Nginx, esses cabeçalhos precisam ser configurados de outra forma.
-
----
+Consulte o **`DEPLOY.md`** para o passo a passo (Cloudflare Pages e, como plano B, a HostGator).
 
 ## 📌 Pendências (aguardando material do cliente)
 
 - [ ] Fotos de perfil reais dos 11 canais (placeholder atual: logo)
 - [ ] Áudios de feedback reais (atualmente tons de teste em `audios/clientes/`)
-- [ ] URL absoluta de Open Graph quando o domínio estiver definido (há um `TODO` no `<head>`)
+- [x] URL absoluta de Open Graph (`og:url`, `og:image`, `canonical` apontam para `https://zooagency.com.br`)
 
 ---
 
