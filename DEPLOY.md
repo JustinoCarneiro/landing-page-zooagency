@@ -1,19 +1,41 @@
 # Guia de Publicação — Zoo Agency
 
+## Caminho principal: Cloudflare Pages (gratuito)
+
+O site é a pasta **`public/`**. Nada fora dela é publicado (documentação, `.htaccess`, scripts e `.md` ficam de fora).
+
+| Campo no Cloudflare Pages | Valor |
+|---|---|
+| Framework preset | None |
+| Build command | *(vazio)* |
+| Build output directory | `public` |
+| Production branch | `main` (ou a branch publicada) |
+
+- **Publicação automática (GitHub Actions):** `.github/workflows/deploy-pages.yml` publica `public/` a cada push na `main`
+  (projeto Pages `zooagency`, criado por upload direto). Segredos no repositório: `CLOUDFLARE_API_TOKEN`
+  (permissão só *Account > Cloudflare Pages > Edit*) e `CLOUDFLARE_ACCOUNT_ID`. O workflow passa `--branch=main`
+  para o deploy sair como **produção**; no primeiro deploy, conferir no painel que ele está marcado "Production".
+- **`public/_headers`** substitui o `.htaccess`: aplica os cabeçalhos de segurança (incluindo a CSP) e define o cache. Imagens e áudios têm cache curto (7 dias) porque são trocados mantendo o mesmo nome.
+- **`public/404.html`** é obrigatório: sem ele a Cloudflare serve a página inicial em qualquer endereço inexistente.
+- **Domínio:** o apex (`zooagency.com.br`) exige a zona DNS na Cloudflare (trocar os nameservers no Registro.br). Os registros atuais são só `A` para o apex e `www` como CNAME; não há e-mail nem subdomínios.
+- **Antes de trocar os nameservers**, copiar os registros para a zona na Cloudflare (a varredura automática não garante achar tudo) e conferir o DNSSEC (hoje desligado).
+- **Depois de validar o site novo**, manter a HostGator por alguns dias antes de cancelar.
+
+---
+
+## Plano B: HostGator / Apache (fluxo anterior)
+
 Instruções para subir o site para a hospedagem (Hostinger ou similar) de forma segura.
 
 ---
 
 ## ✅ O que SUBIR para o servidor
 
-Suba **apenas** estes arquivos e pastas para a raiz do site (`public_html`):
+Suba **apenas** o conteúdo da pasta `public/` mais o `.htaccess` (que fica na raiz do repositório) para a raiz do site (`public_html`):
 
 ```
-index.html
-estilos.css
-app.js
-fonts.css
-.htaccess
+public/index.html, estilos.css, app.js, fonts.css, favicon.ico, 404.html
+.htaccess      (da raiz do repositório)
 fonts/         (fontes auto-hospedadas)
 imagens/       (logo, coruja, coelha, painéis, serviços, streampacks…)
 audios/        (feedbacks dos canais)

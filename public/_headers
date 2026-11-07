@@ -1,0 +1,18 @@
+# Cabeçalhos do Cloudflare Pages (equivalente ao .htaccess do Apache, que a Cloudflare ignora).
+# Este arquivo não é servido ao público. Limite: 100 regras, 2.000 caracteres por linha.
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+
+# Os arquivos de imagem e áudio são trocados mantendo o mesmo nome (ver README),
+# então o cache é curto para o visitante não ver arquivo velho por meses.
+/fonts/*
+  Cache-Control: public, max-age=2592000
+/imagens/*
+  Cache-Control: public, max-age=604800
+/audios/*
+  Cache-Control: public, max-age=604800
