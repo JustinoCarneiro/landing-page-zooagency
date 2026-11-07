@@ -1,0 +1,51 @@
+# Publica a pasta public/ no Cloudflare Pages a cada push em main.
+# O projeto Pages "zooagency" foi criado por upload direto (conta do cliente); este workflow
+# usa o mesmo projeto, via Wrangler, sem o app do GitHub na Cloudflare.
+#
+# Segredos necessários no repositório (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   token da conta, permissão só "Account > Cloudflare Pages > Edit"
+#   CLOUDFLARE_ACCOUNT_ID  id da conta Cloudflare (não é segredo, mas fica junto)
+name: Deploy Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "public/**"
+      - ".github/workflows/deploy-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publicar public/ no Cloudflare Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Conferir que nada interno vai para o ar
+        run: |
+          test -f public/index.html
+          test -f public/404.html
+          if find public \( -name "*.md" -o -name "*.py" -o -name "*.sh" -o -name ".env*" -o -name ".htaccess" \) | grep -q .; then
+            echo "Arquivo interno dentro de public/ (nao publicar):"
+            find public \( -name "*.md" -o -name "*.py" -o -name "*.sh" -o -name ".env*" -o -name ".htaccess" \)
+            exit 1
+          fi
+
+      - name: Publicar
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # --branch=main: sem isso o Wrangler usa o nome da branch do Git, e se ele nao for a
+        # "production branch" do projeto Pages o deploy vira PREVIEW em vez de producao.
+        run: npx --yes wrangler@4.158.0 pages deploy public --project-name=zooagency --branch=main

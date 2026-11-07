@@ -11,6 +11,10 @@ O site é a pasta **`public/`**. Nada fora dela é publicado (documentação, `.
 | Build output directory | `public` |
 | Production branch | `main` (ou a branch publicada) |
 
+- **Publicação automática (GitHub Actions):** `.github/workflows/deploy-pages.yml` publica `public/` a cada push na `main`
+  (projeto Pages `zooagency`, criado por upload direto). Segredos no repositório: `CLOUDFLARE_API_TOKEN`
+  (permissão só *Account > Cloudflare Pages > Edit*) e `CLOUDFLARE_ACCOUNT_ID`. O workflow passa `--branch=main`
+  para o deploy sair como **produção**; no primeiro deploy, conferir no painel que ele está marcado "Production".
 - **`public/_headers`** substitui o `.htaccess`: aplica os cabeçalhos de segurança (incluindo a CSP) e define o cache. Imagens e áudios têm cache curto (7 dias) porque são trocados mantendo o mesmo nome.
 - **`public/404.html`** é obrigatório: sem ele a Cloudflare serve a página inicial em qualquer endereço inexistente.
 - **Domínio:** o apex (`zooagency.com.br`) exige a zona DNS na Cloudflare (trocar os nameservers no Registro.br). Os registros atuais são só `A` para o apex e `www` como CNAME; não há e-mail nem subdomínios.
