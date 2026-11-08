@@ -46,7 +46,7 @@ Tudo o que vai para o ar fica em **`public/`**. O que está fora dela (documenta
 │   ├── 404.html            # página de erro
 │   ├── robots.txt
 │   └── sitemap.xml
-├── .htaccess               # só para Apache/HostGator (a Cloudflare ignora); fica como plano B
+├── .htaccess               # referência para servidores Apache; não é usado (o site está na Cloudflare Pages)
 ├── DEPLOY.md, ARQUITETURA.md, README.md
 └── scripts/, .ondadev/, …  # ferramentas e metodologia (não são publicadas)
 ```
@@ -74,9 +74,9 @@ Depois abra **http://localhost:3000**.
 
 ## 🚀 Publicação
 
-O site é estático e roda em qualquer hospedagem. O destino previsto é o **Cloudflare Pages** (gratuito), na conta do cliente, publicando a pasta **`public/`** (sem build). Os cabeçalhos de segurança e o cache vêm do arquivo `public/_headers`; o `.htaccess` só vale em Apache.
+O site é estático e está no ar no **Cloudflare Pages** (gratuito), na conta do cliente, em `https://zooagency.com.br`, publicando a pasta **`public/`** (sem build). Cada push na `main` que muda `public/` publica sozinho (GitHub Actions). Os cabeçalhos de segurança e o cache vêm do arquivo `public/_headers`; o `.htaccess` só vale em Apache e não é usado.
 
-Consulte o **`DEPLOY.md`** para o passo a passo (Cloudflare Pages e, como plano B, a HostGator).
+Consulte o **`DEPLOY.md`** para o passo a passo e para o histórico da migração (a HostGator foi encerrada).
 
 ## 📌 Pendências (aguardando material do cliente)
 
@@ -90,5 +90,5 @@ Consulte o **`DEPLOY.md`** para o passo a passo (Cloudflare Pages e, como plano 
 
 - Todos os links externos usam `rel="noopener"` e abrem em nova aba
 - `Content-Security-Policy` restritiva (apenas recursos do próprio site)
-- HTTPS forçado e proteção contra clickjacking / MIME sniffing (via `.htaccess`)
+- HTTPS forçado pela Cloudflare e proteção contra clickjacking / MIME sniffing (via `public/_headers`)
 - Sem segredos no código — credenciais de API (ex.: Twitch) nunca devem entrar no front-end

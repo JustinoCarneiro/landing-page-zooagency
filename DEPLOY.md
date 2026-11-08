@@ -14,23 +14,30 @@ O site é a pasta **`public/`**. Nada fora dela é publicado (documentação, `.
 - **Publicação automática (GitHub Actions):** `.github/workflows/deploy-pages.yml` publica `public/` a cada push na `main`
   (projeto Pages `zooagency`, criado por upload direto). Segredos no repositório: `CLOUDFLARE_API_TOKEN`
   (permissão só *Account > Cloudflare Pages > Edit*) e `CLOUDFLARE_ACCOUNT_ID`. O workflow passa `--branch=main`
-  para o deploy sair como **produção**; no primeiro deploy, conferir no painel que ele está marcado "Production".
+  para o deploy sair como **produção** (confirmado, ver abaixo).
 - **Confirmado em 07/11/2026:** o deploy do Actions sai como **Production** (os dois vídeos sem uso sumiram do ar
   em `zooagency.com.br`). Domínio e `www` ativos, com `www` redirecionando 301 para o apex.
 - **Limitação do Pages:** ele **não responde pedidos de trecho (Range/206)** para arquivos estáticos. Testado em um
   iPhone (Safari): os vídeos e o áudio tocaram. Se um dia entrarem vídeos grandes, revalidar no Safari/iOS (saídas:
   Pages Function que devolva 206, ou mídia em um bucket R2 com domínio próprio).
-- **HostGator:** a renovação foi desligada pelo cliente em 07/11/2026; o plano segue até o fim do ciclo
-  (contratado em 28/05/2026) e depois some. Só então limpar da zona DNS os registros que apontam para ela.
+- **HostGator (encerrada):** o site migrou em 07/11/2026. A renovação do plano foi desligada pelo cliente e o ciclo
+  (contratado em 28/05/2026) termina no dia 28. A zona DNS já foi limpa em 08/11/2026; não há mais nada a fazer lá.
+  Cancelar de imediato **apagaria tudo** e não devolveria o valor (passados 30 dias da contratação).
 - **`public/_headers`** substitui o `.htaccess`: aplica os cabeçalhos de segurança (incluindo a CSP) e define o cache. Imagens e áudios têm cache curto (7 dias) porque são trocados mantendo o mesmo nome.
 - **`public/404.html`** é obrigatório: sem ele a Cloudflare serve a página inicial em qualquer endereço inexistente.
-- **Domínio:** o apex (`zooagency.com.br`) exige a zona DNS na Cloudflare (trocar os nameservers no Registro.br). Os registros atuais são só `A` para o apex e `www` como CNAME; não há e-mail nem subdomínios.
-- **Antes de trocar os nameservers**, copiar os registros para a zona na Cloudflare (a varredura automática não garante achar tudo) e conferir o DNSSEC (hoje desligado).
-- **Depois de validar o site novo**, manter a HostGator por alguns dias antes de cancelar.
+- **Domínio:** `zooagency.com.br` (Registro.br, titular o cliente) usa os servidores da Cloudflare. A zona tem só 4
+  registros: `CNAME @` e `CNAME www` para `zooagency.pages.dev`, SPF `v=spf1 -all` e DMARC `p=reject` (a Zoo não usa
+  e-mail no domínio). `www` redireciona 301 para o domínio principal (Redirect Rule "WWW to root").
+- **Registro.br:** para trocar os servidores use **Alterar servidores DNS**. **Não use o "Modo avançado"** do DNS deles:
+  ele move o domínio para `*.sec.dns.br` e trava a delegação externa por cerca de 2 horas.
 
 ---
 
-## Plano B: HostGator / Apache (fluxo anterior)
+## Referência histórica: hospedagem Apache (HostGator)
+
+> **Não usar para publicar.** Desde 07/11/2026 o domínio aponta para a Cloudflare: subir arquivos para a HostGator
+> não altera o site no ar. Esta seção e o `.htaccess` da raiz ficam só como referência para quem um dia hospedar
+> o site em um servidor Apache.
 
 Instruções para subir o site para a hospedagem (Hostinger ou similar) de forma segura.
 
